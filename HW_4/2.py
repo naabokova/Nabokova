@@ -22,9 +22,9 @@ class Temperature:
 
     @property
     def fahrenheit(self):
-        return f"self.__celsius * 9 / 5 + 32" °C
+        return self.__celsius * 9 / 5 + 32
 
 
 temp = Temperature(25)
 print(temp.fahrenheit)  # 77.0
-temp.celsius = -100    # Должно вызвать ValueError
+temp.celsius = -300    # Должно вызвать ValueError
