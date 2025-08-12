@@ -9,22 +9,29 @@
 import asyncio
 import aiohttp
 
-async def fetch_multiple_url(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.text()
-        
-
 async def fetch_multiple_urls(urls):
-    tasks = []
-    for url in urls:
-            tasks.append(fetch_multiple_url(url))
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for url in urls:
+            task = session.get(url)
+            tasks.append(task)
 
-
-
+        results  = await asyncio.gather(*tasks)
+        
+        contents = []
+        for result in results:
+            content = await result.text()  
+            contents.append(content)
+            await result.release()  
+            
+        return contents
+     
+        
 async def main():
     urls = ["https://example.com", "https://google.com"]
-    results = await fetch_multiple_urls(urls)  # [response1, response2]
-    print()
+    pages  = await fetch_multiple_urls(urls)
+    
+    print(f"{urls}")
+            
 
 asyncio.run(main())
